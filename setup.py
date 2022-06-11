@@ -22,7 +22,9 @@ setup(
     zip_safe=False,
     install_requires=[
         "followthemoney >= 2.9.4, < 3.0.0",
-        "requests >= 10.9.0, < 13.0.0",
+        "requests",
+        "structlog",
+        "lxml",
         "click >= 8.0.0, < 8.1.0",
     ],
     tests_require=[],
@@ -37,6 +39,7 @@ setup(
             "flake8>=2.6.0",
             "pytest",
             "pytest-cov",
+            "lxml-stubs",
             "coverage>=4.1",
             "types-setuptools",
             "types-requests",
