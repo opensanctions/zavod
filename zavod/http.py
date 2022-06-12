@@ -5,10 +5,18 @@ from zavod import settings
 
 log = logging.getLogger(__name__)
 
+# with self.http.get(
+#                 url,
+#                 stream=True,
+#                 auth=auth,
+#                 headers=headers,
+#                 timeout=settings.HTTP_TIMEOUT,
+#                 verify=False,
 
-def fetch_file(url: str, name: str) -> Path:
+
+def fetch_file(url: str, name: str, data_path: Path = settings.DATA_PATH) -> Path:
     """Fetch a (large) file via HTTP to the data path."""
-    out_path = settings.DATA_PATH / name
+    out_path = data_path.joinpath(name)
     if out_path.exists():
         return out_path
     log.info("Fetching: %s", url)
