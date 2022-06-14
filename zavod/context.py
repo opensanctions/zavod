@@ -1,6 +1,5 @@
-from os import PathLike
 from pathlib import Path
-from typing import Optional, Union
+from typing import Any, Optional, Union
 from followthemoney import model
 from followthemoney.schema import Schema
 from followthemoney.proxy import EntityProxy, E
@@ -8,7 +7,7 @@ from followthemoney.util import make_entity_id
 
 from zavod import settings
 from zavod.http import fetch_file, make_session
-from zavod.util import join_slug
+from zavod.util import join_slug, PathLike
 from zavod.logs import get_logger
 
 
@@ -25,12 +24,18 @@ class Zavod(object):
         self.log = get_logger(name)
         self.http = make_session()
 
-    def get_resource_path(self, name):
+    def get_resource_path(self, name: str) -> Path:
         path = self.path.joinpath(name)
         path.parent.mkdir(parents=True, exist_ok=True)
         return path
 
-    def fetch_resource(self, name, url, auth=None, headers=None):
+    def fetch_resource(
+        self,
+        name: str,
+        url: str,
+        auth: Optional[Any] = None,
+        headers: Optional[Any] = None,
+    ) -> Path:
         """Fetch a URL into a file located in the current run folder,
         if it does not exist."""
         return fetch_file(

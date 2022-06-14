@@ -1,9 +1,9 @@
 import logging
 from typing import Any, Optional
-import requests
 from functools import partial
 from pathlib import Path
 from requests import Session
+
 from zavod import settings
 
 log = logging.getLogger(__name__)

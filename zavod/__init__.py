@@ -1,10 +1,10 @@
 import logging
-from os import PathLike
 from typing import Generator, Optional
 from contextlib import contextmanager
 from zavod import settings
 from zavod.context import Zavod
 from zavod.logs import configure_logging, get_logger
+from zavod.util import PathLike
 
 __version__ = "0.1.1"
 __all__ = ["init", "context", "Zavod", "configure_logging", "get_logger", "settings"]
