@@ -1,6 +1,6 @@
 from typing import Optional
 from normality import slugify
-from functools import lru_cache
+from functools import cache, lru_cache
 from addressformatting import AddressFormatter  # type: ignore
 from followthemoney.types import registry
 from followthemoney.proxy import E
@@ -9,9 +9,30 @@ from followthemoney.util import make_entity_id, join_text
 from zavod.context import Zavod
 
 
-@lru_cache(maxsize=None)
+@cache
 def get_formatter() -> AddressFormatter:
     return AddressFormatter()
+
+
+@lru_cache(maxsize=200000)
+def format_line(
+    summary: Optional[str],
+    po_box: Optional[str],
+    street: Optional[str],
+    postal_code: Optional[str],
+    city: Optional[str],
+    state: Optional[str],
+    country_code: Optional[str],
+) -> str:
+    data = {
+        "attention": summary,
+        "house": po_box,
+        "road": street,
+        "postcode": postal_code,
+        "city": city,
+        "state": state,
+    }
+    return get_formatter().one_line(data, country=country_code)
 
 
 def make_address(
@@ -52,16 +73,15 @@ def make_address(
 
     country_code = address.first("country")
     if not address.has("full"):
-        data = {
-            "attention": summary,
-            "house": po_box,
-            "road": street,
-            "postcode": postal_code,
-            "city": city,
-            "state": join_text(region, state, sep=", "),
-            # "country": country,
-        }
-        full = get_formatter().one_line(data, country=country_code)
+        full = format_line(
+            summary=summary,
+            po_box=po_box,
+            street=street,
+            postal_code=postal_code,
+            city=city,
+            state=join_text(region, state, sep=", "),
+            country_code=country_code,
+        )
         address.add("full", full)
 
     full_country = registry.country.clean(full)

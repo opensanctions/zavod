@@ -11,7 +11,6 @@ def join_slug(
     sep: str = "-",
     strict: bool = True
 ) -> Optional[str]:
-    # SLUG_REMOVE = re.compile(r"[<>\\\'\\\"’‘]")
     sections = [slugify(p, sep=sep) for p in parts]
     if strict and None in sections:
         return None
