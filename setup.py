@@ -25,12 +25,15 @@ setup(
         "addressformatting >= 1.3.0, < 2.0.0",
         "requests",
         "structlog",
+        "orjson",
         "lxml",
         "click >= 8.0.0, < 8.2.0",
     ],
     tests_require=[],
     entry_points={
-        "console_scripts": [],
+        "console_scripts": [
+            "zavod = zavod.cli:cli",
+        ],
     },
     extras_require={
         "dev": [
