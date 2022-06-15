@@ -25,7 +25,7 @@ def init(
     prefix: Optional[str] = None,
     verbose: bool = False,
     data_path: PathLike = settings.DATA_PATH,
-) -> Zavod:
+) -> Zavod[EntityProxy]:
     """Initiate the zavod working environment and create a processing context."""
     level = logging.DEBUG if verbose else logging.INFO
     configure_logging(level=level)
@@ -38,7 +38,7 @@ def init_context(
     prefix: Optional[str] = None,
     verbose: bool = False,
     data_path: PathLike = settings.DATA_PATH,
-) -> Generator[Zavod, None, None]:
+) -> Generator[Zavod[EntityProxy], None, None]:
     ctx = init(name, prefix=prefix, verbose=verbose, data_path=data_path)
     try:
         yield ctx

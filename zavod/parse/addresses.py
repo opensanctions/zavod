@@ -1,3 +1,4 @@
+from typing import Optional
 from normality import slugify
 from functools import lru_cache
 from addressformatting import AddressFormatter  # type: ignore
@@ -14,22 +15,22 @@ def get_formatter() -> AddressFormatter:
 
 
 def make_address(
-    context: Zavod,
-    full=None,
-    remarks=None,
-    summary=None,
-    po_box=None,
-    street=None,
-    street2=None,
-    street3=None,
-    city=None,
-    place=None,
-    postal_code=None,
-    state=None,
-    region=None,
-    country=None,
-    country_code=None,
-    key=None,
+    context: Zavod[E],
+    full: Optional[str] = None,
+    remarks: Optional[str] = None,
+    summary: Optional[str] = None,
+    po_box: Optional[str] = None,
+    street: Optional[str] = None,
+    street2: Optional[str] = None,
+    street3: Optional[str] = None,
+    city: Optional[str] = None,
+    place: Optional[str] = None,
+    postal_code: Optional[str] = None,
+    state: Optional[str] = None,
+    region: Optional[str] = None,
+    country: Optional[str] = None,
+    country_code: Optional[str] = None,
+    key: Optional[str] = None,
 ) -> E:
     """Generate an address schema object adjacent to the main entity."""
 
@@ -60,7 +61,7 @@ def make_address(
             "state": join_text(region, state, sep=", "),
             # "country": country,
         }
-        full = get_formatter().one_line(data, country=country_code)  # type: ignore
+        full = get_formatter().one_line(data, country=country_code)
         address.add("full", full)
 
     full_country = registry.country.clean(full)
