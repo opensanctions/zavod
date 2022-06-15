@@ -22,7 +22,7 @@ setup(
     zip_safe=False,
     install_requires=[
         "followthemoney >= 2.9.4, < 3.0.0",
-        "addressformatting",
+        "addressformatting >= 1.3.0, < 2.0.0",
         "requests",
         "structlog",
         "lxml",

@@ -1,7 +1,7 @@
 from typing import Optional
 from normality import slugify
 from functools import cache, lru_cache
-from addressformatting import AddressFormatter  # type: ignore
+from addressformatting import AddressFormatter
 from followthemoney.types import registry
 from followthemoney.proxy import E
 from followthemoney.util import make_entity_id, join_text
