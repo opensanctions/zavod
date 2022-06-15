@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Any, Optional, Union
+from typing import Any, Generic, Optional, Type, Union
 from followthemoney import model
 from followthemoney.schema import Schema
 from followthemoney.proxy import EntityProxy, E
@@ -11,20 +11,22 @@ from zavod.util import join_slug, PathLike
 from zavod.logs import get_logger
 
 
-class Zavod(object):
+class Zavod(Generic[E]):
     def __init__(
         self,
         name: str,
+        entity_type: Type[E],
         prefix: Optional[str] = None,
         data_path: PathLike = settings.DATA_PATH,
     ):
         self.name = name
         self.prefix = prefix
+        self.entity_type = entity_type
         self.path = Path(data_path).resolve()
         self.log = get_logger(name)
         self.http = make_session()
 
-    def get_resource_path(self, name: str) -> Path:
+    def get_resource_path(self, name: PathLike) -> Path:
         path = self.path.joinpath(name)
         path.parent.mkdir(parents=True, exist_ok=True)
         return path
@@ -49,7 +51,7 @@ class Zavod(object):
 
     def make(self, schema: Union[str, Schema]) -> E:
         """Make a new entity with some dataset context set."""
-        return EntityProxy(model, {"schema": schema})  # type: ignore
+        return self.entity_type(model, {"schema": schema})
 
     def make_slug(
         self, *parts: str, strict: bool = True, prefix: Optional[str] = None

@@ -1,13 +1,23 @@
 import logging
 from typing import Generator, Optional
 from contextlib import contextmanager
+from followthemoney.proxy import EntityProxy
+
 from zavod import settings
 from zavod.context import Zavod
 from zavod.logs import configure_logging, get_logger
 from zavod.util import PathLike
 
 __version__ = "0.1.1"
-__all__ = ["init", "context", "Zavod", "configure_logging", "get_logger", "settings"]
+__all__ = [
+    "init",
+    "context",
+    "Zavod",
+    "PathLike",
+    "configure_logging",
+    "get_logger",
+    "settings",
+]
 
 
 def init(
@@ -19,7 +29,7 @@ def init(
     """Initiate the zavod working environment and create a processing context."""
     level = logging.DEBUG if verbose else logging.INFO
     configure_logging(level=level)
-    return Zavod(name, prefix=prefix, data_path=data_path)
+    return Zavod(name, EntityProxy, prefix=prefix, data_path=data_path)
 
 
 @contextmanager

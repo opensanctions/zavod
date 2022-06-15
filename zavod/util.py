@@ -15,7 +15,7 @@ def join_slug(
     sections = [slugify(p, sep=sep) for p in parts]
     if strict and None in sections:
         return None
-    texts = [p for p in parts if p is not None]
+    texts = [p for p in sections if p is not None]
     if not len(texts):
         return None
     prefix = slugify(prefix, sep=sep)
