@@ -8,7 +8,7 @@ from zavod.context import Zavod
 from zavod.logs import configure_logging, get_logger
 from zavod.util import PathLike
 
-__version__ = "0.1.1"
+__version__ = "0.1.2"
 __all__ = [
     "init",
     "context",
