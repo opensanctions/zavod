@@ -1,8 +1,8 @@
 import os
-from typing import Optional
+from typing import Optional, Union
 from normality import slugify
 
-PathLike = os.PathLike[str]
+PathLike = Union[str, os.PathLike[str]]
 
 
 def join_slug(
