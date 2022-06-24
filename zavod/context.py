@@ -2,27 +2,30 @@ from pathlib import Path
 from typing import Any, Generic, Optional, Type, Union
 from followthemoney import model
 from followthemoney.schema import Schema
-from followthemoney.proxy import EntityProxy, E
-from followthemoney.util import make_entity_id
+from followthemoney.proxy import E
+from followthemoney.util import make_entity_id, PathLike
 
 from zavod import settings
 from zavod.http import fetch_file, make_session
-from zavod.util import join_slug, PathLike
+from zavod.sinks.common import Sink
+from zavod.util import join_slug
 from zavod.logs import get_logger
 
 
-class Zavod(Generic[E]):
+class GenericZavod(Generic[E]):
     def __init__(
         self,
         name: str,
         entity_type: Type[E],
+        sink: Optional[Sink[E]] = None,
         prefix: Optional[str] = None,
-        data_path: PathLike = settings.DATA_PATH,
+        data_path: Path = settings.DATA_PATH,
     ):
         self.name = name
         self.prefix = prefix
         self.entity_type = entity_type
-        self.path = Path(data_path).resolve()
+        self.path = data_path
+        self.sink = sink
         self.log = get_logger(name)
         self.http = make_session()
 
@@ -68,6 +71,13 @@ class Zavod(Generic[E]):
             return None
         return self.make_slug(hashed, prefix=prefix, strict=True)
 
+    def emit(self, entity: E) -> None:
+        if self.sink is None:
+            return None
+        return self.sink.emit(entity)
+
     def close(self) -> None:
         """Flush and tear down the context."""
         self.http.close()
+        if self.sink is not None:
+            self.sink.close()

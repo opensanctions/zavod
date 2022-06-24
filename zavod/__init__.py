@@ -1,12 +1,15 @@
 import logging
+from pathlib import Path
 from typing import Generator, Optional
 from contextlib import contextmanager
 from followthemoney.proxy import EntityProxy
+from followthemoney.util import PathLike
 
 from zavod import settings
-from zavod.context import Zavod
+from zavod.context import GenericZavod
 from zavod.logs import configure_logging, get_logger
-from zavod.util import PathLike
+from zavod.sinks.common import Sink
+from zavod.sinks.file import JSONFileSink
 
 __version__ = "0.2.1"
 __all__ = [
@@ -20,16 +23,25 @@ __all__ = [
 ]
 
 
+class Zavod(GenericZavod[EntityProxy]):
+    pass
+
+
 def init(
     name: str,
     prefix: Optional[str] = None,
     verbose: bool = False,
-    data_path: PathLike = settings.DATA_PATH,
-) -> Zavod[EntityProxy]:
+    data_path: Path = settings.DATA_PATH,
+    out_file: Optional[PathLike] = "fragments.json",
+) -> Zavod:
     """Initiate the zavod working environment and create a processing context."""
     level = logging.DEBUG if verbose else logging.INFO
     configure_logging(level=level)
-    return Zavod(name, EntityProxy, prefix=prefix, data_path=data_path)
+    sink: Optional[Sink[EntityProxy]] = None
+    if out_file is not None:
+        out_path = data_path.joinpath(out_file)
+        sink = JSONFileSink[EntityProxy](out_path)
+    return Zavod(name, EntityProxy, prefix=prefix, data_path=data_path, sink=sink)
 
 
 @contextmanager
@@ -37,9 +49,16 @@ def init_context(
     name: str,
     prefix: Optional[str] = None,
     verbose: bool = False,
-    data_path: PathLike = settings.DATA_PATH,
-) -> Generator[Zavod[EntityProxy], None, None]:
-    ctx = init(name, prefix=prefix, verbose=verbose, data_path=data_path)
+    data_path: Path = settings.DATA_PATH,
+    out_file: Optional[PathLike] = "fragments.json",
+) -> Generator[Zavod, None, None]:
+    ctx = init(
+        name,
+        prefix=prefix,
+        verbose=verbose,
+        data_path=data_path,
+        out_file=out_file,
+    )
     try:
         yield ctx
     finally:
