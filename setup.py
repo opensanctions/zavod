@@ -21,7 +21,7 @@ setup(
     package_data={"": ["zavod/data/*", "zavod/py.typed"]},
     zip_safe=False,
     install_requires=[
-        "followthemoney >= 2.9.4, < 3.0.0",
+        "followthemoney >= 3.0.0, < 4.0.0",
         "addressformatting >= 1.3.0, < 2.0.0",
         "click >= 8.0.0, < 8.2.0",
         "nomenklatura",

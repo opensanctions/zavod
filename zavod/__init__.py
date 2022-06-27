@@ -22,6 +22,8 @@ __all__ = [
     "settings",
 ]
 
+logging.getLogger("prefixdate").setLevel(logging.ERROR)
+
 
 class Zavod(GenericZavod[EntityProxy]):
     pass
@@ -40,6 +42,7 @@ def init(
     sink: Optional[Sink[EntityProxy]] = None
     if out_file is not None:
         out_path = data_path.joinpath(out_file)
+        out_path.parent.mkdir(exist_ok=True, parents=True)
         sink = JSONFileSink[EntityProxy](out_path)
     return Zavod(name, EntityProxy, prefix=prefix, data_path=data_path, sink=sink)
 
