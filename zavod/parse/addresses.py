@@ -6,7 +6,7 @@ from followthemoney.types import registry
 from followthemoney.proxy import E
 from followthemoney.util import make_entity_id, join_text
 
-from zavod.context import Zavod
+from zavod.context import GenericZavod
 
 
 @cache
@@ -36,7 +36,7 @@ def format_line(
 
 
 def make_address(
-    context: Zavod[E],
+    context: GenericZavod[E],
     full: Optional[str] = None,
     remarks: Optional[str] = None,
     summary: Optional[str] = None,
