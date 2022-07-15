@@ -57,7 +57,7 @@ class GenericZavod(Generic[E]):
         return self.entity_type(model, {"schema": schema})
 
     def make_slug(
-        self, *parts: str, strict: bool = True, prefix: Optional[str] = None
+        self, *parts: Optional[str], strict: bool = True, prefix: Optional[str] = None
     ) -> Optional[str]:
         prefix = self.prefix if prefix is None else prefix
         slug = join_slug(*parts, prefix=prefix, strict=strict)
@@ -65,7 +65,9 @@ class GenericZavod(Generic[E]):
             return slug[:255]
         return None
 
-    def make_id(self, *parts: str, prefix: Optional[str] = None) -> Optional[str]:
+    def make_id(
+        self, *parts: Optional[str], prefix: Optional[str] = None
+    ) -> Optional[str]:
         hashed = make_entity_id(*parts, key_prefix=self.name)
         if hashed is None:
             return None

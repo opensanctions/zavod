@@ -1,12 +1,15 @@
 import logging
+import warnings
 from typing import Any, Optional
 from functools import partial
 from pathlib import Path
 from requests import Session
+from urllib3.connectionpool import InsecureRequestWarning
 
 from zavod import settings
 
 log = logging.getLogger(__name__)
+warnings.filterwarnings("ignore", category=InsecureRequestWarning)
 
 
 def make_session(user_agent: str = settings.HTTP_USER_AGENT) -> Session:
