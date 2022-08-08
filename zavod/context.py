@@ -6,6 +6,7 @@ from followthemoney.proxy import E
 from followthemoney.util import make_entity_id, PathLike
 
 from zavod import settings
+from zavod.audit import inspect
 from zavod.http import fetch_file, make_session
 from zavod.sinks.common import Sink
 from zavod.util import join_slug
@@ -72,6 +73,12 @@ class GenericZavod(Generic[E]):
         if hashed is None:
             return None
         return self.make_slug(hashed, prefix=prefix, strict=True)
+
+    def inspect(self, obj: Any) -> None:
+        """Display an object in a form suitable for inspection."""
+        text = inspect(obj)
+        if text is not None:
+            self.log.info(text)
 
     def emit(self, entity: E) -> None:
         if self.sink is None:
