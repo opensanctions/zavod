@@ -1,7 +1,7 @@
 from lxml.etree import _Element, tostring
 from pprint import pprint, pformat
 from typing import Any, Dict, List, Optional
-from datapatch.result import Result
+from datapatch.result import Result  # type: ignore
 
 from followthemoney.proxy import EntityProxy
 

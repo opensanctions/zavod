@@ -20,7 +20,7 @@ def make_name(
     name5: Optional[str] = None,
     tail_name: Optional[str] = None,
     last_name: Optional[str] = None,
-) -> str:
+) -> Optional[str]:
     """Provides a standardised way of assembling the components of a human name.
     This does a whole lot of cultural ignorance work, so YMMV."""
     full = collapse_spaces(full)
@@ -43,7 +43,7 @@ def make_name(
     )
 
 
-def set_name_part(entity: E, prop: str, value: Optional[str], quiet: bool):
+def set_name_part(entity: E, prop: str, value: Optional[str], quiet: bool) -> None:
     if value is None:
         return
     prop_ = entity.schema.get(prop)
@@ -75,7 +75,7 @@ def apply_name(
     name_prop: str = "name",
     is_weak: bool = False,
     quiet: bool = False,
-):
+) -> None:
     if not is_weak:
         set_name_part(entity, "firstName", given_name, quiet)
         set_name_part(entity, "firstName", first_name, quiet)
