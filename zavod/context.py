@@ -21,11 +21,9 @@ class GenericZavod(Generic[CE, ZD]):
         dataset: ZD,
         entity_type: Type[CE],
         sink: Optional[Sink[CE]] = None,
-        prefix: Optional[str] = None,
         data_path: Path = settings.DATA_PATH,
     ):
         self.dataset = dataset
-        self.prefix = prefix
         self.entity_type = entity_type
         self.path = data_path
         self.sink = sink
@@ -68,7 +66,7 @@ class GenericZavod(Generic[CE, ZD]):
     def make_slug(
         self, *parts: Optional[str], strict: bool = True, prefix: Optional[str] = None
     ) -> Optional[str]:
-        prefix = self.prefix if prefix is None else prefix
+        prefix = self.dataset.prefix if prefix is None else prefix
         slug = join_slug(*parts, prefix=prefix, strict=strict)
         if slug is not None:
             return slug[:255]
