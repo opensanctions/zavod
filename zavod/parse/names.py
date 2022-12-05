@@ -2,7 +2,7 @@ from typing import Optional
 from normality import collapse_spaces
 from followthemoney.util import join_text
 
-from followthemoney.proxy import E
+from nomenklatura.entity import CE
 
 
 def make_name(
@@ -43,7 +43,7 @@ def make_name(
     )
 
 
-def set_name_part(entity: E, prop: str, value: Optional[str], quiet: bool) -> None:
+def set_name_part(entity: CE, prop: str, value: Optional[str], quiet: bool) -> None:
     if value is None:
         return
     prop_ = entity.schema.get(prop)
@@ -55,7 +55,7 @@ def set_name_part(entity: E, prop: str, value: Optional[str], quiet: bool) -> No
 
 
 def apply_name(
-    entity: E,
+    entity: CE,
     full: Optional[str] = None,
     name1: Optional[str] = None,
     first_name: Optional[str] = None,

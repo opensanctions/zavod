@@ -2,7 +2,7 @@ from pathlib import Path
 from typing import Any, Generic, Optional, Type, Union
 from followthemoney import model
 from followthemoney.schema import Schema
-from followthemoney.proxy import E
+from nomenklatura.entity import CE
 from followthemoney.util import make_entity_id, PathLike
 
 from zavod import settings
@@ -13,12 +13,12 @@ from zavod.util import join_slug
 from zavod.logs import get_logger
 
 
-class GenericZavod(Generic[E]):
+class GenericZavod(Generic[CE]):
     def __init__(
         self,
         name: str,
-        entity_type: Type[E],
-        sink: Optional[Sink[E]] = None,
+        entity_type: Type[CE],
+        sink: Optional[Sink[CE]] = None,
         prefix: Optional[str] = None,
         data_path: Path = settings.DATA_PATH,
     ):
@@ -53,7 +53,7 @@ class GenericZavod(Generic[E]):
             headers=headers,
         )
 
-    def make(self, schema: Union[str, Schema]) -> E:
+    def make(self, schema: Union[str, Schema]) -> CE:
         """Make a new entity with some dataset context set."""
         return self.entity_type(model, {"schema": schema})
 
@@ -80,7 +80,7 @@ class GenericZavod(Generic[E]):
         if text is not None:
             self.log.info(text)
 
-    def emit(self, entity: E) -> None:
+    def emit(self, entity: CE) -> None:
         if self.sink is None:
             return None
         return self.sink.emit(entity)

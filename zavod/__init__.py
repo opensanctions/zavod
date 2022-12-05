@@ -2,7 +2,7 @@ import logging
 from pathlib import Path
 from typing import Generator, Optional
 from contextlib import contextmanager
-from followthemoney.proxy import EntityProxy
+from nomenklatura.entity import CompositeEntity
 from followthemoney.util import PathLike
 
 from zavod import settings
@@ -25,7 +25,7 @@ __all__ = [
 logging.getLogger("prefixdate").setLevel(logging.ERROR)
 
 
-class Zavod(GenericZavod[EntityProxy]):
+class Zavod(GenericZavod[CompositeEntity]):
     pass
 
 
@@ -39,12 +39,12 @@ def init(
     """Initiate the zavod working environment and create a processing context."""
     level = logging.DEBUG if verbose else logging.INFO
     configure_logging(level=level)
-    sink: Optional[Sink[EntityProxy]] = None
+    sink: Optional[Sink[CompositeEntity]] = None
     if out_file is not None:
         out_path = data_path.joinpath(out_file)
         out_path.parent.mkdir(exist_ok=True, parents=True)
-        sink = JSONFileSink[EntityProxy](out_path)
-    return Zavod(name, EntityProxy, prefix=prefix, data_path=data_path, sink=sink)
+        sink = JSONFileSink[CompositeEntity](out_path)
+    return Zavod(name, CompositeEntity, prefix=prefix, data_path=data_path, sink=sink)
 
 
 @contextmanager

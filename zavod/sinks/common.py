@@ -1,10 +1,10 @@
 from typing import Generic
 
-from followthemoney.proxy import E
+from nomenklatura.entity import CE
 
 
-class Sink(Generic[E]):
-    def emit(self, entity: E) -> None:
+class Sink(Generic[CE]):
+    def emit(self, entity: CE) -> None:
         raise NotImplemented
 
     def close(self) -> None:

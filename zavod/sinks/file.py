@@ -1,20 +1,20 @@
 import sys
 from threading import Lock
 from typing import BinaryIO, Optional
-from followthemoney.proxy import E
+from nomenklatura.entity import CE
 from followthemoney.util import PathLike
 from followthemoney.cli.util import write_entity
 
 from zavod.sinks.common import Sink
 
 
-class JSONFileSink(Sink[E]):
+class JSONFileSink(Sink[CE]):
     def __init__(self, path: PathLike) -> None:
         self.path = path
         self.lock = Lock()
         self.fh: Optional[BinaryIO] = None
 
-    def emit(self, entity: E) -> None:
+    def emit(self, entity: CE) -> None:
         with self.lock:
             if self.fh is None:
                 if str(self.path) == "-":

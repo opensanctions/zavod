@@ -12,7 +12,7 @@ setup(
     long_description_content_type="text/markdown",
     keywords="data mapping identity followthemoney etl parsing",
     author="Friedrich Lindenberg",
-    author_email="friedrich@pudo.org",
+    author_email="friedrich@opensanctions.org",
     url="https://github.com/opensanctions/zavod",
     license="MIT",
     packages=find_packages(exclude=["ez_setup", "examples", "tests"]),
@@ -22,6 +22,7 @@ setup(
     zip_safe=False,
     install_requires=[
         "followthemoney >= 3.0.0, < 4.0.0",
+        "nomenklatura",
         "addressformatting >= 1.3.0, < 2.0.0",
         "datapatch >= 0.2.1",
         "click >= 8.0.0, < 8.2.0",
