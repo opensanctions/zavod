@@ -36,7 +36,7 @@ class GenericZavod(Generic[CE, ZD]):
         return path
 
     def export_metadata(self, name: PathLike = "index.json") -> Path:
-        path = self.path.joinpath(name)
+        path = self.get_resource_path(name)
         with open(path, "w") as fh:
             json.dump(self.dataset.to_dict(), fh)
         return path

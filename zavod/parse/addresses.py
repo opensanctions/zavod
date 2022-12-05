@@ -7,6 +7,7 @@ from nomenklatura.entity import CE
 from followthemoney.util import make_entity_id, join_text
 
 from zavod.context import GenericZavod
+from zavod.dataset import ZD
 
 
 @cache
@@ -36,7 +37,7 @@ def format_line(
 
 
 def make_address(
-    context: GenericZavod[CE],
+    context: GenericZavod[CE, ZD],
     full: Optional[str] = None,
     remarks: Optional[str] = None,
     summary: Optional[str] = None,
