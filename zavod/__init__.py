@@ -7,6 +7,7 @@ from followthemoney.util import PathLike
 
 from zavod import settings
 from zavod.context import GenericZavod
+from zavod.dataset import ZavodDataset, ZD
 from zavod.logs import configure_logging, get_logger
 from zavod.sinks.common import Sink
 from zavod.sinks.file import JSONFileSink
@@ -16,6 +17,8 @@ __all__ = [
     "init",
     "context",
     "Zavod",
+    "ZavodDataset",
+    "ZD",
     "PathLike",
     "configure_logging",
     "get_logger",
@@ -25,13 +28,12 @@ __all__ = [
 logging.getLogger("prefixdate").setLevel(logging.ERROR)
 
 
-class Zavod(GenericZavod[CompositeEntity]):
+class Zavod(GenericZavod[CompositeEntity, ZavodDataset]):
     pass
 
 
 def init(
-    name: str,
-    prefix: Optional[str] = None,
+    metadata_path: PathLike,
     verbose: bool = False,
     data_path: Path = settings.DATA_PATH,
     out_file: Optional[PathLike] = "fragments.json",
@@ -44,20 +46,19 @@ def init(
         out_path = data_path.joinpath(out_file)
         out_path.parent.mkdir(exist_ok=True, parents=True)
         sink = JSONFileSink[CompositeEntity](out_path)
-    return Zavod(name, CompositeEntity, prefix=prefix, data_path=data_path, sink=sink)
+    dataset = ZavodDataset.from_path(metadata_path)
+    return Zavod(dataset, CompositeEntity, data_path=data_path, sink=sink)
 
 
 @contextmanager
 def init_context(
-    name: str,
-    prefix: Optional[str] = None,
+    metadata_path: PathLike,
     verbose: bool = False,
     data_path: Path = settings.DATA_PATH,
     out_file: Optional[PathLike] = "fragments.json",
 ) -> Generator[Zavod, None, None]:
     ctx = init(
-        name,
-        prefix=prefix,
+        metadata_path,
         verbose=verbose,
         data_path=data_path,
         out_file=out_file,

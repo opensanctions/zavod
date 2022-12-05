@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 from typing import Any, Generic, Optional, Type, Union
 from followthemoney import model
@@ -11,28 +12,35 @@ from zavod.http import fetch_file, make_session
 from zavod.sinks.common import Sink
 from zavod.util import join_slug
 from zavod.logs import get_logger
+from zavod.dataset import ZD
 
 
-class GenericZavod(Generic[CE]):
+class GenericZavod(Generic[CE, ZD]):
     def __init__(
         self,
-        name: str,
+        dataset: ZD,
         entity_type: Type[CE],
         sink: Optional[Sink[CE]] = None,
         prefix: Optional[str] = None,
         data_path: Path = settings.DATA_PATH,
     ):
-        self.name = name
+        self.dataset = dataset
         self.prefix = prefix
         self.entity_type = entity_type
         self.path = data_path
         self.sink = sink
-        self.log = get_logger(name)
+        self.log = get_logger(dataset.name)
         self.http = make_session()
 
     def get_resource_path(self, name: PathLike) -> Path:
         path = self.path.joinpath(name)
         path.parent.mkdir(parents=True, exist_ok=True)
+        return path
+
+    def export_metadata(self, name: PathLike = "index.json") -> Path:
+        path = self.path.joinpath(name)
+        with open(path, "w") as fh:
+            json.dump(self.dataset.to_dict(), fh)
         return path
 
     def fetch_resource(
@@ -69,7 +77,7 @@ class GenericZavod(Generic[CE]):
     def make_id(
         self, *parts: Optional[str], prefix: Optional[str] = None
     ) -> Optional[str]:
-        hashed = make_entity_id(*parts, key_prefix=self.name)
+        hashed = make_entity_id(*parts, key_prefix=self.dataset.name)
         if hashed is None:
             return None
         return self.make_slug(hashed, prefix=prefix, strict=True)
