@@ -89,6 +89,7 @@ class GenericZavod(Generic[CE, ZD]):
     def emit(self, entity: CE) -> None:
         if self.sink is None:
             return None
+        entity.datasets.add(self.dataset.name)
         return self.sink.emit(entity)
 
     def close(self) -> None:

@@ -29,3 +29,9 @@ class JSONFileSink(Sink[CE]):
                 if str(self.path) != "-":
                     self.fh.close()
                 self.fh = None
+
+    def __str__(self) -> str:
+        return str(self.path)
+
+    def __repr__(self) -> str:
+        return f"<JSONFileSink({self.path!r})>"

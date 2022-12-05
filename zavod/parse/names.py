@@ -51,7 +51,7 @@ def set_name_part(entity: CE, prop: str, value: Optional[str], quiet: bool) -> N
         if quiet:
             return
         raise TypeError("Invalid prop: %s [value: %r]" % (prop, value))
-    entity.add(prop, value, quiet=quiet)
+    entity.unsafe_add(prop_, value)
 
 
 def apply_name(
