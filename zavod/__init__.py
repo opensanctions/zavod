@@ -12,7 +12,7 @@ from zavod.logs import configure_logging, get_logger
 from zavod.sinks.common import Sink
 from zavod.sinks.file import JSONFileSink
 
-__version__ = "0.5.1"
+__version__ = "0.5.2"
 __all__ = [
     "init",
     "context",
