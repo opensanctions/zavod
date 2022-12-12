@@ -12,4 +12,5 @@ class ZavodDataset(Dataset):
     def __init__(self, catalog: DataCatalog[ZD], data: Dict[str, Any]):
         super().__init__(catalog, data)
         self.prefix: str = data.get("prefix", slugify(self.name, sep="-"))
-        self.updated_at = datetime_iso(settings.RUN_TIME)
+        if self.updated_at is None:
+            self.updated_at = datetime_iso(settings.RUN_TIME)
