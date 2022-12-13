@@ -1,11 +1,11 @@
-from typing import Optional
-from normality import slugify
 from functools import cache, lru_cache
+from typing import Optional
+
 from addressformatting import AddressFormatter
 from followthemoney.types import registry
+from followthemoney.util import join_text, make_entity_id
 from nomenklatura.entity import CE
-from followthemoney.util import make_entity_id, join_text
-
+from normality import slugify
 from zavod.context import GenericZavod
 from zavod.dataset import ZD
 
@@ -17,13 +17,13 @@ def get_formatter() -> AddressFormatter:
 
 @lru_cache(maxsize=200000)
 def format_line(
-    summary: Optional[str],
-    po_box: Optional[str],
-    street: Optional[str],
-    postal_code: Optional[str],
-    city: Optional[str],
-    state: Optional[str],
-    country_code: Optional[str],
+    summary: Optional[str] = None,
+    po_box: Optional[str] = None,
+    street: Optional[str] = None,
+    postal_code: Optional[str] = None,
+    city: Optional[str] = None,
+    state: Optional[str] = None,
+    country_code: Optional[str] = None,
 ) -> str:
     data = {
         "attention": summary,
