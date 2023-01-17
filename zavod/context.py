@@ -1,18 +1,19 @@
 import json
 from pathlib import Path
 from typing import Any, Generic, Optional, Type, Union
+
 from followthemoney import model
 from followthemoney.schema import Schema
+from followthemoney.util import PathLike, make_entity_id
 from nomenklatura.entity import CE
-from followthemoney.util import make_entity_id, PathLike
 
 from zavod import settings
 from zavod.audit import inspect
+from zavod.dataset import ZD
 from zavod.http import fetch_file, make_session
+from zavod.logs import get_logger
 from zavod.sinks.common import Sink
 from zavod.util import join_slug
-from zavod.logs import get_logger
-from zavod.dataset import ZD
 
 
 class GenericZavod(Generic[CE, ZD]):
@@ -69,7 +70,7 @@ class GenericZavod(Generic[CE, ZD]):
         prefix = self.dataset.prefix if prefix is None else prefix
         slug = join_slug(*parts, prefix=prefix, strict=strict)
         if slug is not None:
-            return slug[:255]
+            return slug[:255].rstrip("-")
         return None
 
     def make_id(
