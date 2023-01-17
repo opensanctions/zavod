@@ -68,10 +68,7 @@ class GenericZavod(Generic[CE, ZD]):
         self, *parts: Optional[str], strict: bool = True, prefix: Optional[str] = None
     ) -> Optional[str]:
         prefix = self.dataset.prefix if prefix is None else prefix
-        slug = join_slug(*parts, prefix=prefix, strict=strict)
-        if slug is not None:
-            return slug[:255].rstrip("-")
-        return None
+        return join_slug(*parts, prefix=prefix, strict=strict)
 
     def make_id(
         self, *parts: Optional[str], prefix: Optional[str] = None

@@ -6,7 +6,8 @@ def join_slug(
     *parts: Optional[str],
     prefix: Optional[str] = None,
     sep: str = "-",
-    strict: bool = True
+    strict: bool = True,
+    max_len: int = 255
 ) -> Optional[str]:
     sections = [slugify(p, sep=sep) for p in parts]
     if strict and None in sections:
@@ -17,4 +18,4 @@ def join_slug(
     prefix = slugify(prefix, sep=sep)
     if prefix is not None:
         texts = [prefix, *texts]
-    return sep.join(texts)
+    return sep.join(texts)[:max_len].strip(sep)
