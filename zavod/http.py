@@ -37,6 +37,6 @@ def fetch_file(
     with session.get(url, auth=auth, headers=headers, stream=True) as res:
         res.raise_for_status()
         with open(out_path, "wb") as fh:
-            for chunk in res.iter_content(chunk_size=8192):
+            for chunk in res.iter_content(chunk_size=8192 * 10):
                 fh.write(chunk)
     return out_path
