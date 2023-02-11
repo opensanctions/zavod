@@ -1,18 +1,20 @@
 import sys
 from threading import Lock
 from typing import BinaryIO, Optional
-from nomenklatura.entity import CE
-from followthemoney.util import PathLike
+
 from followthemoney.cli.util import write_entity
+from followthemoney.util import PathLike
+from nomenklatura.entity import CE
 
 from zavod.sinks.common import Sink
 
 
 class JSONFileSink(Sink[CE]):
-    def __init__(self, path: PathLike) -> None:
+    def __init__(self, path: PathLike, append: Optional[bool] = False) -> None:
         self.path = path
         self.lock = Lock()
         self.fh: Optional[BinaryIO] = None
+        self.mode: str = "ab" if append else "wb"
 
     def emit(self, entity: CE) -> None:
         with self.lock:
@@ -20,7 +22,7 @@ class JSONFileSink(Sink[CE]):
                 if str(self.path) == "-":
                     self.fh = sys.stdout.buffer
                 else:
-                    self.fh = open(self.path, "wb")
+                    self.fh = open(self.path, self.mode)
             write_entity(self.fh, entity)
 
     def close(self) -> None:
