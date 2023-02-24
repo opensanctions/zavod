@@ -1,4 +1,4 @@
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 
 with open("README.md") as f:
     long_description = f.read()
@@ -22,6 +22,7 @@ setup(
     zip_safe=False,
     install_requires=[
         "followthemoney >= 3.2.0, < 4.0.0",
+        "followthemoney-store >= 3.0.3, < 4.0.0",
         "nomenklatura >= 2.7.5, < 3.0.0",
         "addressformatting >= 1.3.0, < 2.0.0",
         "datapatch >= 0.2.1",

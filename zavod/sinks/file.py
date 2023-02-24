@@ -1,9 +1,10 @@
 import sys
 from threading import Lock
 from typing import BinaryIO, Optional
-from nomenklatura.entity import CE
-from followthemoney.util import PathLike
+
 from followthemoney.cli.util import write_entity
+from followthemoney.util import PathLike
+from nomenklatura.entity import CE
 
 from zavod.sinks.common import Sink
 
