@@ -43,7 +43,9 @@ def make_name(
     )
 
 
-def set_name_part(entity: CE, prop: str, value: Optional[str], quiet: bool) -> None:
+def set_name_part(
+    entity: CE, prop: str, value: Optional[str], quiet: bool, lang: Optional[str]
+) -> None:
     if value is None:
         return
     prop_ = entity.schema.get(prop)
@@ -51,7 +53,7 @@ def set_name_part(entity: CE, prop: str, value: Optional[str], quiet: bool) -> N
         if quiet:
             return
         raise TypeError("Invalid prop: %s [value: %r]" % (prop, value))
-    entity.unsafe_add(prop_, value)
+    entity.unsafe_add(prop_, value, lang=lang)
 
 
 def apply_name(
@@ -75,21 +77,22 @@ def apply_name(
     name_prop: str = "name",
     is_weak: bool = False,
     quiet: bool = False,
+    lang: Optional[str] = None,
 ) -> None:
     if not is_weak:
-        set_name_part(entity, "firstName", given_name, quiet)
-        set_name_part(entity, "firstName", first_name, quiet)
-        set_name_part(entity, "secondName", second_name, quiet)
-        set_name_part(entity, "fatherName", patronymic, quiet)
-        set_name_part(entity, "motherName", matronymic, quiet)
-        set_name_part(entity, "lastName", last_name, quiet)
-        set_name_part(entity, "lastName", maiden_name, quiet)
-        set_name_part(entity, "firstName", name1, quiet)
-        set_name_part(entity, "secondName", name2, quiet)
-        set_name_part(entity, "middleName", name3, quiet)
-        set_name_part(entity, "middleName", name4, quiet)
-        set_name_part(entity, "middleName", name5, quiet)
-        set_name_part(entity, "lastName", tail_name, quiet)
+        set_name_part(entity, "firstName", given_name, quiet, lang)
+        set_name_part(entity, "firstName", first_name, quiet, lang)
+        set_name_part(entity, "secondName", second_name, quiet, lang)
+        set_name_part(entity, "fatherName", patronymic, quiet, lang)
+        set_name_part(entity, "motherName", matronymic, quiet, lang)
+        set_name_part(entity, "lastName", last_name, quiet, lang)
+        set_name_part(entity, "lastName", maiden_name, quiet, lang)
+        set_name_part(entity, "firstName", name1, quiet, lang)
+        set_name_part(entity, "secondName", name2, quiet, lang)
+        set_name_part(entity, "middleName", name3, quiet, lang)
+        set_name_part(entity, "middleName", name4, quiet, lang)
+        set_name_part(entity, "middleName", name5, quiet, lang)
+        set_name_part(entity, "lastName", tail_name, quiet, lang)
     if alias:
         name_prop = "alias"
     if is_weak:
@@ -111,4 +114,4 @@ def apply_name(
         last_name=last_name,
     )
     if full is not None and len(full):
-        entity.add(name_prop, full, quiet=quiet)
+        entity.add(name_prop, full, quiet=quiet, lang=lang)

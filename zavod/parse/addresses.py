@@ -53,6 +53,7 @@ def make_address(
     country: Optional[str] = None,
     country_code: Optional[str] = None,
     key: Optional[str] = None,
+    lang: Optional[str] = None,
 ) -> CE:
     """Generate an address schema object adjacent to the main entity."""
 
@@ -60,20 +61,20 @@ def make_address(
     street = join_text(street, street2, street3, sep=", ")
 
     address = context.make("Address")
-    address.add("full", full)
-    address.add("remarks", remarks)
-    address.add("summary", summary)
-    address.add("postOfficeBox", po_box)
-    address.add("street", street)
-    address.add("city", city)
-    address.add("postalCode", postal_code)
-    address.add("region", region)
-    address.add("state", state, quiet=True)
-    address.add("country", country)
+    address.add("full", full, lang=lang)
+    address.add("remarks", remarks, lang=lang)
+    address.add("summary", summary, lang=lang)
+    address.add("postOfficeBox", po_box, lang=lang)
+    address.add("street", street, lang=lang)
+    address.add("city", city, lang=lang)
+    address.add("postalCode", postal_code, lang=lang)
+    address.add("region", region, lang=lang)
+    address.add("state", state, quiet=True, lang=lang)
+    address.add("country", country, lang=lang)
     address.add("country", country_code)
 
     country_code = address.first("country")
-    if not address.has("full"):
+    if not full:
         full = format_line(
             summary=summary,
             po_box=po_box,
@@ -83,15 +84,14 @@ def make_address(
             state=join_text(region, state, sep=", "),
             country_code=country_code,
         )
-        address.add("full", full)
 
     full_country = registry.country.clean(full)
     if full_country is not None:
-        address.add("country", full_country)
+        address.add("country", full_country, lang=lang)
         # full = None
 
     # full = clean_address(full)
-    address.set("full", full)
+    address.add("full", full, lang=lang)
 
     if full:
         norm_full = slugify(full)
