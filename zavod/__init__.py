@@ -10,7 +10,7 @@ from zavod.context import GenericZavod
 from zavod.dataset import ZavodDataset, ZD
 from zavod.logs import configure_logging, get_logger
 from zavod.sinks.common import Sink
-from zavod.sinks.file import JSONFileSink
+from zavod.sinks.json_entity import JSONEntitySink
 
 __version__ = "0.5.4"
 __all__ = [
@@ -37,15 +37,15 @@ def init(
     verbose: bool = False,
     data_path: Path = settings.DATA_PATH,
     out_file: Optional[PathLike] = "fragments.json",
+    sink: Optional[Sink[CompositeEntity]] = None,
 ) -> Zavod:
     """Initiate the zavod working environment and create a processing context."""
     level = logging.DEBUG if verbose else logging.INFO
     configure_logging(level=level)
-    sink: Optional[Sink[CompositeEntity]] = None
-    if out_file is not None:
+    if out_file is not None and sink is None:
         out_path = data_path.joinpath(out_file)
         out_path.parent.mkdir(exist_ok=True, parents=True)
-        sink = JSONFileSink[CompositeEntity](out_path)
+        sink = JSONEntitySink[CompositeEntity](out_path)
     dataset = ZavodDataset.from_path(metadata_path)
     return Zavod(dataset, CompositeEntity, data_path=data_path, sink=sink)
 
@@ -56,12 +56,14 @@ def init_context(
     verbose: bool = False,
     data_path: Path = settings.DATA_PATH,
     out_file: Optional[PathLike] = "fragments.json",
+    sink: Optional[Sink[CompositeEntity]] = None,
 ) -> Generator[Zavod, None, None]:
     ctx = init(
         metadata_path,
         verbose=verbose,
         data_path=data_path,
         out_file=out_file,
+        sink=sink,
     )
     try:
         yield ctx
