@@ -1,4 +1,3 @@
-import logging
 import warnings
 from typing import Any, Optional
 from functools import partial
@@ -7,8 +6,9 @@ from requests import Session
 from urllib3.connectionpool import InsecureRequestWarning
 
 from zavod import settings
+from zavod.logs import get_logger
 
-log = logging.getLogger(__name__)
+log = get_logger(__name__)
 warnings.filterwarnings("ignore", category=InsecureRequestWarning)
 
 
@@ -32,7 +32,7 @@ def fetch_file(
     out_path = data_path.joinpath(name)
     if out_path.exists():
         return out_path
-    log.info("Fetching: %s", url)
+    log.info("Fetching file", url=url)
     out_path.parent.mkdir(parents=True, exist_ok=True)
     with session.get(url, auth=auth, headers=headers, stream=True) as res:
         res.raise_for_status()

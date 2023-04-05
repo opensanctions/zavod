@@ -41,13 +41,15 @@ def configure_logging(
             ),
         )
 
-    processors.append(structlog.stdlib.ProcessorFormatter.wrap_for_formatter)
+    all_processors = processors + [
+        structlog.stdlib.ProcessorFormatter.wrap_for_formatter
+    ]
 
     # configuration for structlog based loggers
     structlog.configure(
         cache_logger_on_first_use=True,
         wrapper_class=structlog.stdlib.BoundLogger,
-        processors=processors,
+        processors=all_processors,
         logger_factory=structlog.stdlib.LoggerFactory(),
     )
 
