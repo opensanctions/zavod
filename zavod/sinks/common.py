@@ -14,7 +14,7 @@ class Sink(Generic[CE]):
         pass
 
 
-class FileSink(Generic[CE]):
+class FileSink(Sink[CE]):
     def __init__(self, path: PathLike) -> None:
         self.path = path
         self.lock = Lock()
