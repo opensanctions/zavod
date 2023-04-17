@@ -62,7 +62,11 @@ class GenericZavod(Generic[CE, ZD]):
 
     def make(self, schema: Union[str, Schema]) -> CE:
         """Make a new entity with some dataset context set."""
-        return self.entity_type(model, {"schema": schema})
+        return self.entity_type(
+            model,
+            {"schema": schema},
+            default_dataset=self.dataset.name,
+        )
 
     def make_slug(
         self, *parts: Optional[str], strict: bool = True, prefix: Optional[str] = None
