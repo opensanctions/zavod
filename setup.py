@@ -6,7 +6,7 @@ with open("README.md") as f:
 
 setup(
     name="zavod",
-    version="0.6.2",
+    version="0.6.3",
     description="Data factory for followthemoney data.",
     long_description=long_description,
     long_description_content_type="text/markdown",
