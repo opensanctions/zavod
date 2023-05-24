@@ -20,6 +20,8 @@ def make_name(
     name5: Optional[str] = None,
     tail_name: Optional[str] = None,
     last_name: Optional[str] = None,
+    prefix: Optional[str] = None,
+    suffix: Optional[str] = None,
 ) -> Optional[str]:
     """Provides a standardised way of assembling the components of a human name.
     This does a whole lot of cultural ignorance work, so YMMV."""
@@ -27,6 +29,7 @@ def make_name(
     if full is not None and len(full) > 1:
         return full
     return join_text(
+        prefix,
         name1,
         first_name,
         given_name,
@@ -40,6 +43,7 @@ def make_name(
         name5,
         tail_name,
         last_name,
+        suffix,
     )
 
 
@@ -73,6 +77,8 @@ def apply_name(
     tail_name: Optional[str] = None,
     last_name: Optional[str] = None,
     maiden_name: Optional[str] = None,
+    prefix: Optional[str] = None,
+    suffix: Optional[str] = None,
     alias: bool = False,
     name_prop: str = "name",
     is_weak: bool = False,
@@ -112,6 +118,8 @@ def apply_name(
         name5=name5,
         tail_name=tail_name,
         last_name=last_name,
+        prefix=prefix,
+        suffix=suffix,
     )
     if full is not None and len(full):
         entity.add(name_prop, full, quiet=quiet, lang=lang)
