@@ -1,5 +1,5 @@
 import sys
-from threading import Lock
+from threading import RLock
 from typing import Generic, BinaryIO, Optional
 from followthemoney.util import PathLike
 
@@ -17,7 +17,7 @@ class Sink(Generic[CE]):
 class FileSink(Sink[CE]):
     def __init__(self, path: PathLike) -> None:
         self.path = path
-        self.lock = Lock()
+        self.lock = RLock()
         self.fh: Optional[BinaryIO] = None
 
     def emit_locked(self, fh: BinaryIO, entity: CE) -> None:
