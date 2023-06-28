@@ -1,6 +1,6 @@
 import logging
 from pathlib import Path
-from typing import Generator, Optional
+from typing import Generator, Optional, Type
 from contextlib import contextmanager
 from nomenklatura.entity import CompositeEntity
 from followthemoney.util import PathLike
@@ -38,6 +38,7 @@ def init(
     data_path: Path = settings.DATA_PATH,
     out_file: Optional[PathLike] = "fragments.json",
     sink: Optional[Sink[CompositeEntity]] = None,
+    sink_cls: Type[Sink[CompositeEntity]] = JSONEntitySink,
 ) -> Zavod:
     """Initiate the zavod working environment and create a processing context."""
     level = logging.DEBUG if verbose else logging.INFO
@@ -45,7 +46,7 @@ def init(
     if out_file is not None and sink is None:
         out_path = data_path.joinpath(out_file)
         out_path.parent.mkdir(exist_ok=True, parents=True)
-        sink = JSONEntitySink[CompositeEntity](out_path)
+        sink = sink_cls(out_path)
     dataset = ZavodDataset.from_path(metadata_path)
     return Zavod(dataset, CompositeEntity, data_path=data_path, sink=sink)
 

@@ -15,13 +15,16 @@ def get_formatter() -> AddressFormatter:
     return AddressFormatter()
 
 
-@lru_cache(maxsize=200000)
-def format_line(
+@lru_cache(maxsize=5000)
+def format_address(
     summary: Optional[str] = None,
     po_box: Optional[str] = None,
     street: Optional[str] = None,
+    house: Optional[str] = None,
+    house_number: Optional[str] = None,
     postal_code: Optional[str] = None,
     city: Optional[str] = None,
+    county: Optional[str] = None,
     state: Optional[str] = None,
     country_code: Optional[str] = None,
 ) -> str:
@@ -29,9 +32,12 @@ def format_line(
         "attention": summary,
         "house": po_box,
         "road": street,
+        "house": house,
+        "house_number": house_number,
         "postcode": postal_code,
         "city": city,
-        "state": state,
+        "county": county,
+        "state_district": state,
     }
     return get_formatter().one_line(data, country=country_code)
 
@@ -75,7 +81,7 @@ def make_address(
 
     country_code = address.first("country")
     if not full:
-        full = format_line(
+        full = format_address(
             summary=summary,
             po_box=po_box,
             street=street,
