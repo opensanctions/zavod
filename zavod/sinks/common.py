@@ -7,6 +7,9 @@ from nomenklatura.entity import CE
 
 
 class Sink(Generic[CE]):
+    def __init__(self, path: PathLike) -> None:
+        self.path = path
+
     def emit(self, entity: CE) -> None:
         raise NotImplemented
 
@@ -16,7 +19,7 @@ class Sink(Generic[CE]):
 
 class FileSink(Sink[CE]):
     def __init__(self, path: PathLike) -> None:
-        self.path = path
+        super().__init__(path)
         self.lock = RLock()
         self.fh: Optional[BinaryIO] = None
 
@@ -26,17 +29,13 @@ class FileSink(Sink[CE]):
     def emit(self, entity: CE) -> None:
         with self.lock:
             if self.fh is None:
-                if str(self.path) == "-":
-                    self.fh = sys.stdout.buffer
-                else:
-                    self.fh = open(self.path, "wb")
+                self.fh = open(self.path, "wb")
             self.emit_locked(self.fh, entity)
 
     def close(self) -> None:
         with self.lock:
             if self.fh is not None:
-                if str(self.path) != "-":
-                    self.fh.close()
+                self.fh.close()
                 self.fh = None
 
     def __str__(self) -> str:

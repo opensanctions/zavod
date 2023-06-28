@@ -18,11 +18,8 @@ class PackStatementSink(FileSink[CE]):
 
     def emit(self, entity: CE) -> None:
         with self.lock:
-            if self.writer is None:
-                if str(self.path) == "-":
-                    self.fh = sys.stdout.buffer
-                else:
-                    self.fh = open(self.path, "wb")
+            if self.fh is None:
+                self.fh = open(self.path, "wb")
             if self.wrapper is None and self.fh is not None:
                 self.wrapper = TextIOWrapper(self.fh, encoding="utf-8")
             if self.writer is None and self.wrapper is not None:
@@ -31,7 +28,6 @@ class PackStatementSink(FileSink[CE]):
                     dialect=csv.unix_dialect,
                     quoting=csv.QUOTE_MINIMAL,
                 )
-                self.writer.writerow(PACK_COLUMNS)
             if self.writer is not None:
                 for stmt in entity.statements:
                     row = pack_statement(stmt)

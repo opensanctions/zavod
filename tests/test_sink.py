@@ -54,4 +54,4 @@ def test_pack_statement_sink():
     assert repr(path) in repr(sink)
 
     with open(path, "r") as fh:
-        assert len(fh.readlines()) == 5
+        assert len(fh.readlines()) == 4
