@@ -28,5 +28,5 @@ class JSONStatementSink(FileSink[CE]):
         return f"<JSONStatementSink({self.path!r})>"
 
 
-class PackStatementSink(JSONStatementSink):
+class PackStatementSink(JSONStatementSink[CE]):
     FORMAT = PACK
