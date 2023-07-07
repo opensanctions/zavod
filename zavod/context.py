@@ -65,7 +65,7 @@ class GenericZavod(Generic[CE, ZD]):
         return self.entity_type(
             model,
             {"schema": schema},
-            default_dataset=self.dataset.name,
+            default_dataset=self.dataset,
         )
 
     def make_slug(
